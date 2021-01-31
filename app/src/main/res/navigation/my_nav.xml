@@ -69,12 +69,8 @@
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
         <action
-            android:id="@+id/action_settingFragment_to_showUserFragment"
-            app:destination="@id/showUserFragment"
-            app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_right"
-            app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left" />
+            android:id="@+id/action_settingFragment_to_showUserActivity"
+            app:destination="@id/showUserActivity" />
     </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"
@@ -365,15 +361,6 @@
         android:id="@+id/updateUserFragment"
         android:name="com.yemen.oshopping.setting.UpdateUserFragment"
         android:label="UpdateUserFragment" >
-        <action
-            android:id="@+id/action_updateUserFragment_to_showUserFragment"
-            app:destination="@id/showUserFragment"
-            app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_right"
-            app:popUpTo="@id/contactUsFragment"
-            app:popUpToInclusive="true"
-            app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left" />
         <argument
             android:name="first_name "
             app:argType="string"
@@ -422,5 +409,10 @@
         android:id="@+id/showProductReportsFragment"
         android:name="com.yemen.oshopping.ui.ShowProductReportsFragment"
         android:label="ShowProductReportsFragment" />
+    <activity
+        android:id="@+id/showUserActivity"
+        android:name="com.yemen.oshopping.setting.ShowUserActivity"
+        android:label="activity_show_user"
+        tools:layout="@layout/activity_show_user" />
 
 </navigation>
