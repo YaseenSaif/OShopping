@@ -17,10 +17,10 @@ import com.yemen.oshopping.sharedPreferences.UserSharedPreferences
 import com.yemen.oshopping.ui.ShowUsersReportsActivity
 import com.yemen.oshopping.vendor.UpdateProductFragmentArgs
 import com.yemen.oshopping.viewmodel.OshoppingViewModel
-
+private const val PARAM1="USER"
 class UpdateUserFragment : Fragment() {
 
-  val uargs: UpdateUserFragmentArgs by navArgs()
+  //val uargs: UpdateUserFragmentArgs by navArgs()
     private var uri: String? = null
     var imageName:String?=null
     lateinit var fNameEditText: EditText
@@ -31,12 +31,13 @@ class UpdateUserFragment : Fragment() {
     lateinit var editImageBTN: ImageButton
     lateinit var updateUserBtn:Button
     lateinit var userImage: ImageView
-    lateinit var user: User
+     var user: User? = null
     private lateinit var oshoppingViewModel: OshoppingViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        user=arguments?.getSerializable(PARAM1) as User?
         oshoppingViewModel = ViewModelProviders.of(this).get(OshoppingViewModel::class.java)
 
     }
@@ -55,12 +56,12 @@ class UpdateUserFragment : Fragment() {
         updateUserBtn=view.findViewById(R.id.updateUserBtn)
 
         userImage = view.findViewById(R.id.user_image)
-        fNameEditText.setText(uargs.firstName.toString())
-        lNameEditText.setText(uargs.lastName.toString())
-        addressEditText.setText(uargs.address)
-        phoneNumberEditText.setText(uargs.phoneNumber)
-        detailsEditText.setText(uargs.details)
-        Picasso.get().load(uri+uargs.email).into(userImage)
+        fNameEditText.setText(user?.first_name.toString())
+        lNameEditText.setText(user?.last_name.toString())
+        addressEditText.setText(user?.address)
+        phoneNumberEditText.setText(user?.phone_number)
+        detailsEditText.setText(user?.details)
+        Picasso.get().load(uri+user?.email).into(userImage)
 
 
         updateUserBtn.setOnClickListener {
@@ -74,10 +75,25 @@ class UpdateUserFragment : Fragment() {
 //                ,image = imageName
             )
             oshoppingViewModel.updateUser(user)
-            Navigation.findNavController(view)
-                .navigate(R.id.action_updateUserFragment_to_showUserFragment)
+            restartActivity()
         }
         return view
+    }
+    private fun restartActivity() {
+        val intent = Intent(this@UpdateUserFragment.context, ShowUserActivity::class.java)
+        startActivity(intent)
+        if (activity != null) {
+            requireActivity().finish()
+        }
+    }
+    companion object{
+        fun newInstance(param1 :User):UpdateUserFragment{
+            return UpdateUserFragment().apply {
+                arguments=Bundle().apply {
+                    putSerializable(PARAM1,param1)
+                }
+            }
+        }
     }
 
 }

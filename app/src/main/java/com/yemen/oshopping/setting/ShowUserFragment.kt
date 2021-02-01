@@ -1,5 +1,6 @@
 package com.yemen.oshopping.setting
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,8 +26,12 @@ class ShowUserFragment : Fragment() {
     lateinit var editImageBTN:ImageButton
     lateinit var chatImageBTN:ImageButton
     lateinit var user: User
+    private var callbacks: Callbacks? = null
     private lateinit var oshoppingViewModel: OshoppingViewModel
 
+    interface Callbacks {
+        fun onClicked(user:User)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         oshoppingViewModel = ViewModelProviders.of(this).get(OshoppingViewModel::class.java)
@@ -46,19 +51,8 @@ class ShowUserFragment : Fragment() {
         editImageBTN=view.findViewById(R.id.edit_image_button)
         chatImageBTN=view.findViewById(R.id.chat_image_button)
         editImageBTN.setOnClickListener {
-            val action=
-                user.user_id?.let { it1 ->
-                    ShowUserFragmentDirections.actionShowUserFragmentToUpdateUserFragment2(userId = it1,firstName =user.first_name,
-                        lastName = user.last_name,email = user.email,phoneNumber = user.phone_number,
-                        image = user.image,details =  user.details,address=user.address)
-
+            callbacks?.onClicked(user)
                 }
-                if (action != null) {
-                    Navigation.findNavController(view)
-                        .navigate(action)
-                }
-            }
-
         chatImageBTN.setOnClickListener {
 
         }
@@ -77,8 +71,14 @@ class ShowUserFragment : Fragment() {
                 }
             })
     }
-
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
     fun updateUI() {
         userName.text = user.first_name+" "+user.last_name
         userEmail.text = user.email
